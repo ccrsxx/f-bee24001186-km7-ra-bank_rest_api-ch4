@@ -11,7 +11,7 @@ export class UserController {
   static async getUser(req, res) {
     const user = await UserService.getUser(req.params.id);
 
-    res.status(201).json({ data: user });
+    res.status(200).json({ data: user });
   }
 
   /**
@@ -21,7 +21,7 @@ export class UserController {
   static async getUsers(req, res) {
     const users = await UserService.getUsers();
 
-    res.status(201).json({ data: users });
+    res.status(200).json({ data: users });
   }
 
   /**

@@ -32,12 +32,6 @@ Here are the steps to run the project locally.
    cp .env.example .env.local
    ```
 
-1. Create DB if not exists
-
-   ```bash
-   npm run db:create
-   ```
-
 1. Run migrations
 
    ```bash

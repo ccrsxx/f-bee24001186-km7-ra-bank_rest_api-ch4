@@ -9,9 +9,9 @@ export class TransactionController {
    * @param {express.Response} res
    */
   static async getTransaction(req, res) {
-    const user = await TransactionService.getTransaction(req.params.id);
+    const transaction = await TransactionService.getTransaction(req.params.id);
 
-    res.status(201).json({ data: user });
+    res.status(200).json({ data: transaction });
   }
 
   /**
@@ -19,9 +19,9 @@ export class TransactionController {
    * @param {express.Response} res
    */
   static async getTransactions(req, res) {
-    const users = await TransactionService.getTransactions();
+    const transactions = await TransactionService.getTransactions();
 
-    res.status(201).json({ data: users });
+    res.status(200).json({ data: transactions });
   }
 
   /**
@@ -29,8 +29,8 @@ export class TransactionController {
    * @param {express.Response} res
    */
   static async createTransaction(req, res) {
-    const user = await TransactionService.createTransaction(req.body);
+    const transaction = await TransactionService.createTransaction(req.body);
 
-    res.status(201).json({ data: user });
+    res.status(201).json({ data: transaction });
   }
 }

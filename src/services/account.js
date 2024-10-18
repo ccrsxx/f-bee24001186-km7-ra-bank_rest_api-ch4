@@ -82,9 +82,9 @@ export class AccountService {
 
     const balanceDecimal = new Prisma.Decimal(account.balance);
 
-    const balanceEnough = balanceDecimal.greaterThanOrEqualTo(amount);
+    const isBalanceEnough = balanceDecimal.gte(amount);
 
-    if (!balanceEnough) {
+    if (!isBalanceEnough) {
       throw new HttpError(400, 'Insufficient balance');
     }
 
