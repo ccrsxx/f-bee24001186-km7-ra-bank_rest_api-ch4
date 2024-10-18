@@ -15,7 +15,7 @@ export class TransactionController {
   }
 
   /**
-   * @param {express.Request<unknown, ValidTransactionPayload>} req
+   * @param {express.Request} req
    * @param {express.Response} res
    */
   static async getTransactions(req, res) {
@@ -25,7 +25,7 @@ export class TransactionController {
   }
 
   /**
-   * @param {express.Request<unknown, ValidTransactionPayload>} req
+   * @param {express.Request<unknown, unknown, ValidTransactionPayload>} req
    * @param {express.Response} res
    */
   static async createTransaction(req, res) {

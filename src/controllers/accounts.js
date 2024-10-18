@@ -1,7 +1,7 @@
 import express from 'express';
 import { AccountService } from '../services/account.js';
 
-/** @import {ValidUserPayload} from '../middlewares/validation/user.js' */
+/** @import {ValidAccountPayload, ValidAmountPayload} from '../middlewares/validation/account.js' */
 
 export class AccountController {
   /**
@@ -15,7 +15,7 @@ export class AccountController {
   }
 
   /**
-   * @param {express.Request<unknown, ValidUserPayload>} req
+   * @param {express.Request} req
    * @param {express.Response} res
    */
   static async getAccounts(req, res) {
@@ -25,11 +25,37 @@ export class AccountController {
   }
 
   /**
-   * @param {express.Request<unknown, ValidUserPayload>} req
+   * @param {express.Request<unknown, ValidAccountPayload>} req
    * @param {express.Response} res
    */
   static async createAccount(req, res) {
     const account = await AccountService.createAccount(req.body);
+
+    res.status(201).json({ data: account });
+  }
+
+  /**
+   * @param {express.Request<{ id: string }, unknown, ValidAmountPayload>} req
+   * @param {express.Response} res
+   */
+  static async withdrawAccount(req, res) {
+    const account = await AccountService.withdrawAccount(
+      req.params.id,
+      req.body.amount
+    );
+
+    res.status(201).json({ data: account });
+  }
+
+  /**
+   * @param {express.Request<{ id: string }, unknown, ValidAmountPayload>} req
+   * @param {express.Response} res
+   */
+  static async depositAccount(req, res) {
+    const account = await AccountService.depositAccount(
+      req.params.id,
+      req.body.amount
+    );
 
     res.status(201).json({ data: account });
   }

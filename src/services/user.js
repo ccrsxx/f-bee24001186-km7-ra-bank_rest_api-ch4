@@ -1,5 +1,3 @@
-import error from '../middlewares/error.js';
-import { logger } from '../loaders/pino.js';
 import { prisma } from '../utils/db.js';
 import { HttpError } from '../utils/error.js';
 import { AuthService } from './auth.js';
@@ -39,6 +37,16 @@ export class UserService {
 
   /** @param {ValidUserPayload} user */
   static async createUser(user) {
+    const existingUser = await prisma.user.findUnique({
+      where: {
+        email: user.email
+      }
+    });
+
+    if (existingUser) {
+      throw new HttpError(409, 'User already registered');
+    }
+
     user.password = await AuthService.hashPassword(user.password);
 
     const { address, identityType, identityNumber, ...restUser } = user;
@@ -53,6 +61,9 @@ export class UserService {
             identityNumber
           }
         }
+      },
+      include: {
+        profile: true
       }
     });
 

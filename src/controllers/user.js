@@ -15,7 +15,7 @@ export class UserController {
   }
 
   /**
-   * @param {express.Request<unknown, ValidUserPayload>} req
+   * @param {express.Request} req
    * @param {express.Response} res
    */
   static async getUsers(req, res) {
@@ -25,7 +25,7 @@ export class UserController {
   }
 
   /**
-   * @param {express.Request<unknown, ValidUserPayload>} req
+   * @param {express.Request<unknown, unknown, ValidUserPayload>} req
    * @param {express.Response} res
    */
   static async createUser(req, res) {

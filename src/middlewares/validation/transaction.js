@@ -12,14 +12,14 @@ import { validStringSchema } from '../../utils/validation.js';
 
 export class TransactionValidationMiddleware {
   /**
-   * @param {express.Request<unknown, ValidTransactionPayload>} req
+   * @param {express.Request<unknown, unknown, ValidTransactionPayload>} req
    * @param {express.Response} res
    * @param {express.NextFunction} next
    */
   static isValidTransactionPayload(req, res, next) {
     /** @type {Joi.ObjectSchema<ValidTransactionPayload>} */
     const validUserPayload = Joi.object({
-      amount: Joi.number().required(),
+      amount: Joi.number().positive().required(),
       sourceAccountId: validStringSchema.required(),
       destinationAccountId: validStringSchema.required()
     }).required();
@@ -36,7 +36,7 @@ export class TransactionValidationMiddleware {
   }
 
   /**
-   * @param {express.Request<unknown, ValidTransactionPayload>} req
+   * @param {express.Request<unknown, unknown, ValidTransactionPayload>} req
    * @param {express.Response} res
    * @param {express.NextFunction} next
    */

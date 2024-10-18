@@ -1,4 +1,3 @@
-import { logger } from '../loaders/pino.js';
 import { prisma } from '../utils/db.js';
 import { Prisma } from '@prisma/client';
 import { HttpError } from '../utils/error.js';
@@ -11,6 +10,18 @@ export class TransactionService {
     const transaction = await prisma.transaction.findUnique({
       where: {
         id
+      },
+      include: {
+        sourceAccount: {
+          include: {
+            user: true
+          }
+        },
+        destinationAccount: {
+          include: {
+            user: true
+          }
+        }
       }
     });
 
@@ -95,6 +106,18 @@ export class TransactionService {
         amount,
         sourceAccountId,
         destinationAccountId
+      },
+      include: {
+        sourceAccount: {
+          include: {
+            user: true
+          }
+        },
+        destinationAccount: {
+          include: {
+            user: true
+          }
+        }
       }
     });
 

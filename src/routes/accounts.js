@@ -23,15 +23,17 @@ export default (appRouter) => {
     AccountController.getAccount
   );
 
-  router.get(
+  router.post(
     '/:id/withdraw',
     CommonValidationMiddleware.isValidParamsIdUuid,
-    AccountController.getAccount
+    AccountValidationMiddleware.isValidAmountPayload,
+    AccountController.withdrawAccount
   );
 
-  router.get(
+  router.post(
     '/:id/deposit',
     CommonValidationMiddleware.isValidParamsIdUuid,
-    AccountController.getAccount
+    AccountValidationMiddleware.isValidAmountPayload,
+    AccountController.depositAccount
   );
 };
