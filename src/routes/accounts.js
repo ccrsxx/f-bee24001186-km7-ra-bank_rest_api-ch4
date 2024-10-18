@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { AccountController } from '../controllers/accounts.js';
+import { AccountController } from '../controllers/account.js';
 import { AccountValidationMiddleware } from '../middlewares/validation/account.js';
 import { CommonValidationMiddleware } from '../middlewares/validation/common.js';
 

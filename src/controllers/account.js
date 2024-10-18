@@ -11,7 +11,7 @@ export class AccountController {
   static async getAccount(req, res) {
     const account = await AccountService.getAccount(req.params.id);
 
-    res.status(201).json({ data: account });
+    res.status(200).json({ data: account });
   }
 
   /**
@@ -21,7 +21,7 @@ export class AccountController {
   static async getAccounts(req, res) {
     const accounts = await AccountService.getAccounts();
 
-    res.status(201).json({ data: accounts });
+    res.status(200).json({ data: accounts });
   }
 
   /**
@@ -44,7 +44,7 @@ export class AccountController {
       req.body.amount
     );
 
-    res.status(201).json({ data: account });
+    res.status(200).json({ data: account });
   }
 
   /**
@@ -57,6 +57,6 @@ export class AccountController {
       req.body.amount
     );
 
-    res.status(201).json({ data: account });
+    res.status(200).json({ data: account });
   }
 }

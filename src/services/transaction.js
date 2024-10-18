@@ -75,9 +75,9 @@ export class TransactionService {
       throw new HttpError(404, 'Destination account not found');
     }
 
-    const sourceBalance = new Prisma.Decimal(sourceAccount.balance);
+    const sourceBalanceDecimal = new Prisma.Decimal(sourceAccount.balance);
 
-    const isSourceBalanceEnough = sourceBalance.greaterThanOrEqualTo(amount);
+    const isSourceBalanceEnough = sourceBalanceDecimal.gte(amount);
 
     if (!isSourceBalanceEnough) {
       throw new HttpError(400, 'Insufficient balance');
@@ -88,16 +88,20 @@ export class TransactionService {
         id: sourceAccountId
       },
       data: {
-        balance: sourceBalance.minus(amount)
+        balance: sourceBalanceDecimal.sub(amount)
       }
     });
+
+    const destinationBalanceDecimal = new Prisma.Decimal(
+      destinationAccount.balance
+    );
 
     const updateDestinationAccountPromise = prisma.account.update({
       where: {
         id: destinationAccountId
       },
       data: {
-        balance: new Prisma.Decimal(destinationAccount.balance).add(amount)
+        balance: destinationBalanceDecimal.add(amount)
       }
     });
 
