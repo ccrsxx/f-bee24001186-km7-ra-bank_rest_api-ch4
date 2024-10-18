@@ -1,0 +1,73 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id       String @id @default(uuid()) @db.Uuid
+  name     String
+  email    String @unique
+  password String
+
+  profile Profile[]
+  account Account[]
+
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz()
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz()
+
+  @@map("users")
+}
+
+model Profile {
+  id             String @id @default(uuid()) @db.Uuid
+  address        String
+  identityType   String @map("identity_type")
+  identityNumber String @map("identity_number")
+
+  userId String @unique @map("user_id") @db.Uuid
+
+  user User @relation(fields: [userId], references: [id])
+
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz()
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz()
+
+  @@map("profiles")
+}
+
+model Account {
+  id                String  @id @default(uuid()) @db.Uuid
+  balance           Decimal @default(0) @db.Decimal(18, 2)
+  bankName          String  @map("bank_name")
+  bankAccountNumber BigInt  @unique @default(autoincrement()) @map("bank_account_number")
+
+  userId String @map("user_id") @db.Uuid
+
+  user User @relation(fields: [userId], references: [id])
+
+  sentTransactions     Transaction[] @relation("SentTransactions")
+  receivedTransactions Transaction[] @relation("ReceivedTransactions")
+
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz()
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz()
+
+  @@map("accounts")
+}
+
+model Transaction {
+  id                   String  @id @default(uuid()) @db.Uuid
+  amount               Decimal
+  sourceAccountId      String  @map("source_account_id") @db.Uuid
+  destinationAccountId String  @map("destination_account_id") @db.Uuid
+
+  sourceAccount      Account @relation("SentTransactions", fields: [sourceAccountId], references: [id])
+  destinationAccount Account @relation("ReceivedTransactions", fields: [destinationAccountId], references: [id])
+
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz()
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz()
+
+  @@map("transactions")
+}

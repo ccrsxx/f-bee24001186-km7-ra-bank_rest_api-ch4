@@ -1,0 +1,47 @@
+{
+  "name": "challenge-04",
+  "version": "1.0.0",
+  "main": "./src/index.js",
+  "type": "module",
+  "scripts": {
+    "dev": "cross-env NODE_ENV=development nodemon ./src/index.ts",
+    "start": "cross-env NODE_ENV=production node ./src/index.js",
+    "db:drop": "dotenv -e .env.local -- cross-env-shell \"echo DROP DATABASE IF EXISTS $DATABASE_TO_DROP\" | dotenv -e .env.local -- prisma db execute --stdin",
+    "db:seed": "dotenv -e .env.local -- prisma db seed",
+    "db:push": "dotenv -e .env.local -- prisma db push",
+    "db:reset": "dotenv -e .env.local -- prisma migrate reset --force",
+    "db:studio": "dotenv -e .env.local -- prisma studio",
+    "db:create": "dotenv -e .env.local -- cross-env-shell \"echo CREATE DATABASE $DATABASE_TO_CREATE\" | dotenv -e .env.local -- prisma db execute --stdin",
+    "db:deploy": "dotenv -e .env.local -- prisma migrate deploy",
+    "db:migrate": "dotenv -e .env.local -- prisma migrate dev",
+    "db:migrate:create-only": "dotenv -e .env.local -- prisma migrate dev --create-only"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@prisma/client": "^5.21.0",
+    "bcrypt": "^5.1.1",
+    "cors": "^2.8.5",
+    "cross-env": "^7.0.3",
+    "dotenv": "^16.4.5",
+    "dotenv-cli": "^7.4.2",
+    "express": "^5.0.1",
+    "joi": "^17.13.3",
+    "nodemon": "^3.1.7",
+    "pino": "^9.5.0",
+    "pino-http": "^10.3.0",
+    "pino-pretty": "^11.3.0",
+    "prisma": "^5.21.0"
+  },
+  "prisma": {
+    "schema": "src/utils/prisma/schema.prisma"
+  },
+  "devDependencies": {
+    "@types/bcrypt": "^5.0.2",
+    "@types/cors": "^2.8.17",
+    "prettier": "^3.3.3",
+    "prettier-plugin-jsdoc": "^1.3.0"
+  }
+}
