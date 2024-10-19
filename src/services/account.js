@@ -85,7 +85,7 @@ export class AccountService {
     const isBalanceEnough = balanceDecimal.gte(amount);
 
     if (!isBalanceEnough) {
-      throw new HttpError(400, 'Insufficient balance');
+      throw new HttpError(403, 'Insufficient balance');
     }
 
     const data = await prisma.account.update({

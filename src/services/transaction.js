@@ -80,7 +80,7 @@ export class TransactionService {
     const isSourceBalanceEnough = sourceBalanceDecimal.gte(amount);
 
     if (!isSourceBalanceEnough) {
-      throw new HttpError(400, 'Insufficient balance');
+      throw new HttpError(403, 'Insufficient balance');
     }
 
     const updateSourceAccountPromise = prisma.account.update({
