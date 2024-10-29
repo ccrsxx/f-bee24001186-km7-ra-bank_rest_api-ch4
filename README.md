@@ -56,7 +56,7 @@ Here are the steps to run the project locally.
    npm run test
    ```
 
-1. Run generate OpenAPI documentation. Make sure to fill necessary environment variables in `.env.local` file before running this command.
+1. Optional. Run generate OpenAPI documentation. Make sure to fill necessary environment variables in `.env.local` file before running this command.
 
    ```bash
    npm run generate-openapi
