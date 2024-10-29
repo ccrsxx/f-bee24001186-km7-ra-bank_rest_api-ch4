@@ -1,5 +1,4 @@
 import { Prisma } from '@prisma/client';
-import { logger } from '../loaders/pino.js';
 import { prisma } from '../utils/db.js';
 import { HttpError } from '../utils/error.js';
 
@@ -34,9 +33,12 @@ export class AccountService {
     return accounts;
   }
 
-  /** @param {ValidAccountPayload} account */
-  static async createAccount(account) {
-    const { userId, bankName } = account;
+  /**
+   * @param {string} userId
+   * @param {ValidAccountPayload} account
+   */
+  static async createAccount(userId, account) {
+    const { bankName } = account;
 
     const user = await prisma.user.findUnique({
       where: {

@@ -1,42 +1,40 @@
 import Joi from 'joi';
-import express from 'express';
-import { Prisma } from '@prisma/client';
-import { logger } from '../../loaders/pino.js';
 import { validStringSchema } from '../../utils/validation.js';
+import { HttpError } from '../../utils/error.js';
+
+/** @import {Request,Response,NextFunction} from 'express' */
+/** @import {Prisma,User} from '@prisma/client' */
 
 /** @typedef {Prisma.AccountCreateWithoutUserInput & { userId: string }} ValidAccountPayload */
 /** @typedef {{ amount: number }} ValidAmountPayload */
 
 export class AccountValidationMiddleware {
   /**
-   * @param {express.Request<unknown, unknown, ValidAccountPayload>} req
-   * @param {express.Response} res
-   * @param {express.NextFunction} next
+   * @param {Request<unknown, unknown, ValidAccountPayload>} req
+   * @param {Response<unknown, { user: User }>} _res
+   * @param {NextFunction} next
    */
-  static isValidAccountPayload(req, res, next) {
+  static isValidAccountPayload(req, _res, next) {
     /** @type {Joi.ObjectSchema<ValidAccountPayload>} */
     const validUserPayload = Joi.object({
-      userId: validStringSchema.required(),
       bankName: validStringSchema.required()
     }).required();
 
     const { error } = validUserPayload.validate(req.body);
 
     if (error) {
-      logger.error(error.message);
-      res.status(400).json({ error: { message: error.message } });
-      return;
+      throw new HttpError(400, error.message);
     }
 
     next();
   }
 
   /**
-   * @param {express.Request<unknown, unknown, ValidAmountPayload>} req
-   * @param {express.Response} res
-   * @param {express.NextFunction} next
+   * @param {Request<unknown, unknown, ValidAmountPayload>} req
+   * @param {Response} _res
+   * @param {NextFunction} next
    */
-  static isValidAmountPayload(req, res, next) {
+  static isValidAmountPayload(req, _res, next) {
     /** @type {Joi.ObjectSchema<ValidAmountPayload>} */
     const validAmountPayload = Joi.object({
       amount: Joi.number().positive().required()
@@ -45,9 +43,7 @@ export class AccountValidationMiddleware {
     const { error } = validAmountPayload.validate(req.body);
 
     if (error) {
-      logger.error(error.message);
-      res.status(400).json({ error: { message: error.message } });
-      return;
+      throw new HttpError(400, error.message);
     }
 
     next();

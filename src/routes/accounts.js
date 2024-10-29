@@ -1,7 +1,9 @@
 import { Router } from 'express';
+import { AuthMiddleware } from '../middlewares/auth.js';
 import { AccountController } from '../controllers/account.js';
-import { AccountValidationMiddleware } from '../middlewares/validation/account.js';
 import { CommonValidationMiddleware } from '../middlewares/validation/common.js';
+import { AccountValidationMiddleware } from '../middlewares/validation/account.js';
+import { AccountMiddleware } from '../middlewares/account.js';
 
 /** @param {Router} appRouter */
 export default (appRouter) => {
@@ -13,6 +15,7 @@ export default (appRouter) => {
 
   router.post(
     '/',
+    AuthMiddleware.isAuthorized,
     AccountValidationMiddleware.isValidAccountPayload,
     AccountController.createAccount
   );
@@ -25,14 +28,18 @@ export default (appRouter) => {
 
   router.post(
     '/:id/withdraw',
+    AuthMiddleware.isAuthorized,
     CommonValidationMiddleware.isValidParamsIdUuid,
+    AccountMiddleware.isAccountBelongsToUser,
     AccountValidationMiddleware.isValidAmountPayload,
     AccountController.withdrawAccount
   );
 
   router.post(
     '/:id/deposit',
+    AuthMiddleware.isAuthorized,
     CommonValidationMiddleware.isValidParamsIdUuid,
+    AccountMiddleware.isAccountBelongsToUser,
     AccountValidationMiddleware.isValidAmountPayload,
     AccountController.depositAccount
   );

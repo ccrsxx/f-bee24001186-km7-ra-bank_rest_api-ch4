@@ -1,7 +1,8 @@
 import Joi from 'joi';
-import express from 'express';
-import { logger } from '../../loaders/pino.js';
 import { validStringSchema } from '../../utils/validation.js';
+import { HttpError } from '../../utils/error.js';
+
+/** @import {Request,Response,NextFunction} from 'express' */
 
 /**
  * @typedef {Object} ValidTransactionPayload
@@ -12,11 +13,11 @@ import { validStringSchema } from '../../utils/validation.js';
 
 export class TransactionValidationMiddleware {
   /**
-   * @param {express.Request<unknown, unknown, ValidTransactionPayload>} req
-   * @param {express.Response} res
-   * @param {express.NextFunction} next
+   * @param {Request<unknown, unknown, ValidTransactionPayload>} req
+   * @param {Response} _res
+   * @param {NextFunction} next
    */
-  static isValidTransactionPayload(req, res, next) {
+  static isValidTransactionPayload(req, _res, next) {
     /** @type {Joi.ObjectSchema<ValidTransactionPayload>} */
     const validUserPayload = Joi.object({
       amount: Joi.number().positive().required(),
@@ -27,29 +28,24 @@ export class TransactionValidationMiddleware {
     const { error } = validUserPayload.validate(req.body);
 
     if (error) {
-      logger.error(error.message);
-      res.status(400).json({ error: { message: error.message } });
-      return;
+      throw new HttpError(400, error.message);
     }
 
     next();
   }
 
   /**
-   * @param {express.Request<unknown, unknown, ValidTransactionPayload>} req
-   * @param {express.Response} res
-   * @param {express.NextFunction} next
+   * @param {Request<unknown, unknown, ValidTransactionPayload>} req
+   * @param {Response} _res
+   * @param {NextFunction} next
    */
-  static isBothAccountDifferent(req, res, next) {
+  static isBothAccountDifferent(req, _res, next) {
     const { sourceAccountId, destinationAccountId } = req.body;
 
     const isBothAccountTheSame = sourceAccountId === destinationAccountId;
 
     if (isBothAccountTheSame) {
-      res
-        .status(400)
-        .json({ error: { message: "Both account can't be the same" } });
-      return;
+      throw new HttpError(400, "Both account can't be the same");
     }
 
     next();

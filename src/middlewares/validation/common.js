@@ -1,22 +1,21 @@
 import Joi from 'joi';
-import express from 'express';
-import { logger } from '../../loaders/pino.js';
+import { HttpError } from '../../utils/error.js';
+
+/** @import {Request,Response,NextFunction} from 'express' */
 
 export class CommonValidationMiddleware {
   /**
-   * @param {express.Request<{ id: string }>} req
-   * @param {express.Response} res
-   * @param {express.NextFunction} next
+   * @param {Request<{ id: string }>} req
+   * @param {Response} _res
+   * @param {NextFunction} next
    */
-  static isValidParamsIdUuid(req, res, next) {
+  static isValidParamsIdUuid(req, _res, next) {
     const validUserId = Joi.string().uuid().required();
 
     const { error } = validUserId.validate(req.params.id);
 
     if (error) {
-      logger.error(error.message);
-      res.status(400).json({ error: { message: error.message } });
-      return;
+      throw new HttpError(400, error.message);
     }
 
     next();

@@ -1,12 +1,13 @@
-import express from 'express';
 import { AccountService } from '../services/account.js';
 
+/** @import {Request, Response} from 'express' */
+/** @import {User} from '@prisma/client' */
 /** @import {ValidAccountPayload, ValidAmountPayload} from '../middlewares/validation/account.js' */
 
 export class AccountController {
   /**
-   * @param {express.Request<{ id: string }>} req
-   * @param {express.Response} res
+   * @param {Request<{ id: string }>} req
+   * @param {Response} res
    */
   static async getAccount(req, res) {
     const account = await AccountService.getAccount(req.params.id);
@@ -15,28 +16,31 @@ export class AccountController {
   }
 
   /**
-   * @param {express.Request} req
-   * @param {express.Response} res
+   * @param {Request} _req
+   * @param {Response} res
    */
-  static async getAccounts(req, res) {
+  static async getAccounts(_req, res) {
     const accounts = await AccountService.getAccounts();
 
     res.status(200).json({ data: accounts });
   }
 
   /**
-   * @param {express.Request<unknown, ValidAccountPayload>} req
-   * @param {express.Response} res
+   * @param {Request<unknown, ValidAccountPayload>} req
+   * @param {Response<unknown, { user: User }>} res
    */
   static async createAccount(req, res) {
-    const account = await AccountService.createAccount(req.body);
+    const account = await AccountService.createAccount(
+      res.locals.user.id,
+      req.body
+    );
 
     res.status(201).json({ data: account });
   }
 
   /**
-   * @param {express.Request<{ id: string }, unknown, ValidAmountPayload>} req
-   * @param {express.Response} res
+   * @param {Request<{ id: string }, unknown, ValidAmountPayload>} req
+   * @param {Response} res
    */
   static async withdrawAccount(req, res) {
     const account = await AccountService.withdrawAccount(
@@ -48,8 +52,8 @@ export class AccountController {
   }
 
   /**
-   * @param {express.Request<{ id: string }, unknown, ValidAmountPayload>} req
-   * @param {express.Response} res
+   * @param {Request<{ id: string }, unknown, ValidAmountPayload>} req
+   * @param {Response} res
    */
   static async depositAccount(req, res) {
     const account = await AccountService.depositAccount(

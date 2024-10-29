@@ -1,0 +1,18 @@
+services:
+  app:
+    extends:
+      file: compose.common.yaml
+      service: app
+    build:
+      dockerfile: Dockerfile.dev
+    volumes:
+      - .:/app
+    environment:
+      - NODE_ENV=development
+    container_name: bank-rest-api-dev
+
+  db:
+    extends:
+      file: compose.common.yaml
+      service: db
+    container_name: bank-rest-api-db-dev
