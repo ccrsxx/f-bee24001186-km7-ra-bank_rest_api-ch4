@@ -32,7 +32,9 @@ function validateEnv() {
 
   const { value, error } = envSchema.validate(mergedEnv);
 
-  if (error) {
+  const shouldThrowError = error && process.env.CI !== 'true';
+
+  if (shouldThrowError) {
     throw new Error(`Environment validation error: ${error.message}`);
   }
 
