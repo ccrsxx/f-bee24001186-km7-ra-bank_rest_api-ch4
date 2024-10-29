@@ -1,1 +1,7 @@
-npm test
+#!/bin/sh
+
+npm run type-check
+npm run test
+npm run lint
+
+npx lint-staged
