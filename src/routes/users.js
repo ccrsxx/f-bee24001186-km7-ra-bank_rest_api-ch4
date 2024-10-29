@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { UserController } from '../controllers/user.js';
-import { UserValidationMiddleware } from '../middlewares/validation/user.js';
 import { CommonValidationMiddleware } from '../middlewares/validation/common.js';
+import { AuthMiddleware } from '../middlewares/auth.js';
 
 /** @param {Router} appRouter */
 export default (appRouter) => {
@@ -11,11 +11,7 @@ export default (appRouter) => {
 
   router.get('/', UserController.getUsers);
 
-  router.post(
-    '/',
-    UserValidationMiddleware.isValidUserPayload,
-    UserController.createUser
-  );
+  router.get('/me', AuthMiddleware.isAuthorized, UserController.getCurrentUser);
 
   router.get(
     '/:id',

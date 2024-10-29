@@ -1,14 +1,15 @@
-import server from 'http';
-import express from 'express';
 import cors from './cors.js';
 import pino from './pino.js';
 import common from './common.js';
 
+/** @import {Express} from 'express' */
+/** @import {Server} from 'http' */
+
 /**
- * @param {express.Express} app
- * @param {server.Server} server
+ * @param {Express} app
+ * @param {Server} _server
  */
-export default (app, server) => {
+export default (app, _server) => {
   cors(app);
   pino(app);
   common(app);

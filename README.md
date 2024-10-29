@@ -4,6 +4,12 @@
 
 The API documentation can be found [here](https://www.postman.com/soratan/workspace/challenge-4) on Postman.
 
+## Test Coverage
+
+Here's the test coverage result:
+
+![Test Coverage](/.github/assets/coverage.png)
+
 ## Development
 
 Here are the steps to run the project locally.
@@ -42,6 +48,18 @@ Here are the steps to run the project locally.
 
    ```bash
    npm run dev
+   ```
+
+1. Run tests
+
+   ```bash
+   npm run test
+   ```
+
+1. Run generate OpenAPI documentation. Make sure to fill necessary environment variables in `.env.local` file before running this command.
+
+   ```bash
+   npm run generate-openapi
    ```
 
 1. Optional. You can run Prisma Studio to see the data in the database directly on the browser

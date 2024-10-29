@@ -1,15 +1,17 @@
-import Pino from 'pino';
-import PinoHttp from 'pino-http';
-import express from 'express';
+import { pino as Pino } from 'pino';
+import { pinoHttp as PinoHttp } from 'pino-http';
 
-/** @type {Pino.LoggerOptions} */
+/** @import {Application} from 'express' */
+/** @import {LoggerOptions} from 'pino' */
+
+/** @type {LoggerOptions} */
 const developmentLoggerOptions = {
   transport: {
     target: 'pino-pretty'
   }
 };
 
-/** @type {Pino.LoggerOptions} */
+/** @type {LoggerOptions} */
 const productionLoggerOptions = {
   formatters: {
     level(label) {
@@ -30,7 +32,7 @@ const pinoHttp = PinoHttp({
   logger
 });
 
-/** @param {express.Application} app */
+/** @param {Application} app */
 export default (app) => {
   app.use(pinoHttp);
 };

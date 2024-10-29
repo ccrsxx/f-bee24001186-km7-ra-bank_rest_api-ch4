@@ -7,6 +7,7 @@ import { validStringSchema } from './validation.js';
 /**
  * @typedef {Object} EnvSchema
  * @property {string} PORT - The port for the application.
+ * @property {string} JWT_SECRET - The secret for the JWT token.
  * @property {string} DATABASE_URL - The URL for the database connection.
  * @property {string} FRONTEND_URL - The URL for the frontend application.
  */
@@ -14,6 +15,7 @@ import { validStringSchema } from './validation.js';
 /** @type {Joi.ObjectSchema<EnvSchema>} */
 export const envSchema = Joi.object({
   PORT: validStringSchema.required(),
+  JWT_SECRET: validStringSchema.required(),
   DATABASE_URL: validStringSchema.required(),
   FRONTEND_URL: validStringSchema.required()
 })

@@ -88,20 +88,20 @@ export class TransactionService {
         id: sourceAccountId
       },
       data: {
-        balance: sourceBalanceDecimal.sub(amount)
+        balance: {
+          decrement: amount
+        }
       }
     });
-
-    const destinationBalanceDecimal = new Prisma.Decimal(
-      destinationAccount.balance
-    );
 
     const updateDestinationAccountPromise = prisma.account.update({
       where: {
         id: destinationAccountId
       },
       data: {
-        balance: destinationBalanceDecimal.add(amount)
+        balance: {
+          increment: amount
+        }
       }
     });
 

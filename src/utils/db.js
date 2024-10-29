@@ -5,7 +5,7 @@ export const prisma = new PrismaClient({
   datasourceUrl: appEnv.DATABASE_URL
 });
 
-// @ts-ignore
+// @ts-expect-error
 BigInt.prototype.toJSON = function () {
   return this.toString();
 };

@@ -1,6 +1,7 @@
 import cors from 'cors';
-import express from 'express';
 import { appEnv } from '../utils/env.js';
+
+/** @import {Application} from 'express' */
 
 /** @type {cors.CorsOptions} */
 export const corsOptions = {
@@ -8,7 +9,7 @@ export const corsOptions = {
   credentials: true
 };
 
-/** @param {express.Application} app */
+/** @param {Application} app */
 export default (app) => {
   app.use(cors(corsOptions));
 };

@@ -1,12 +1,12 @@
-import express from 'express';
 import { TransactionService } from '../services/transaction.js';
 
+/** @import {Request,Response} from 'express' */
 /** @import {ValidTransactionPayload} from '../middlewares/validation/transaction.js' */
 
 export class TransactionController {
   /**
-   * @param {express.Request<{ id: string }>} req
-   * @param {express.Response} res
+   * @param {Request<{ id: string }>} req
+   * @param {Response} res
    */
   static async getTransaction(req, res) {
     const transaction = await TransactionService.getTransaction(req.params.id);
@@ -15,18 +15,18 @@ export class TransactionController {
   }
 
   /**
-   * @param {express.Request} req
-   * @param {express.Response} res
+   * @param {Request} _req
+   * @param {Response} res
    */
-  static async getTransactions(req, res) {
+  static async getTransactions(_req, res) {
     const transactions = await TransactionService.getTransactions();
 
     res.status(200).json({ data: transactions });
   }
 
   /**
-   * @param {express.Request<unknown, unknown, ValidTransactionPayload>} req
-   * @param {express.Response} res
+   * @param {Request<unknown, unknown, ValidTransactionPayload>} req
+   * @param {Response} res
    */
   static async createTransaction(req, res) {
     const transaction = await TransactionService.createTransaction(req.body);

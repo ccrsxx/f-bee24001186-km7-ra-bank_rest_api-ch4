@@ -38,9 +38,6 @@ model Profile {
   @@map("profiles")
 }
 
-// I prefer to use Account instead of BankAccount for the model name because all the models are in singular word
-// so it's better to keep it consistent. Adding Bank is just redundant because as we already know it's a bank account.
-
 model Account {
   id                String  @id @default(uuid()) @db.Uuid
   balance           Decimal @default(0) @db.Decimal(18, 2)

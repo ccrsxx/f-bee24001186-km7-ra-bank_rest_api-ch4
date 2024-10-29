@@ -1,19 +1,20 @@
-import express from 'express';
 import { HttpError } from '../utils/error.js';
 import { logger } from '../loaders/pino.js';
 
-/** @param {express.Application} app */
+/** @import {Application,Request,Response,NextFunction} from 'express' */
+
+/** @param {Application} app */
 export default (app) => {
   app.use(notFound);
   app.use(errorHandler);
 };
 
 /**
- * @param {express.Request} req
- * @param {express.Response} res
- * @param {express.NextFunction} next
+ * @param {Request} req
+ * @param {Response} _res
+ * @param {NextFunction} next
  */
-function notFound(req, res, next) {
+export function notFound(req, _res, next) {
   const notFoundError = new HttpError(
     404,
     `Route not found - ${req.originalUrl}`
@@ -24,11 +25,11 @@ function notFound(req, res, next) {
 
 /**
  * @param {Error} err
- * @param {express.Request} req
- * @param {express.Response} res
- * @param {express.NextFunction} next
+ * @param {Request} _req
+ * @param {Response} res
+ * @param {NextFunction} _next
  */
-function errorHandler(err, req, res, next) {
+export function errorHandler(err, _req, res, _next) {
   logger.error(err);
 
   if (err instanceof HttpError) {

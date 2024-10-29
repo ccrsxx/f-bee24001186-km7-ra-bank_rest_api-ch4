@@ -1,12 +1,13 @@
-import express from 'express';
 import { UserService } from '../services/user.js';
 
+/** @import {Request,Response} from 'express' */
+/** @import {User} from '@prisma/client' */
 /** @import {ValidUserPayload} from '../middlewares/validation/user.js' */
 
 export class UserController {
   /**
-   * @param {express.Request<{ id: string }>} req
-   * @param {express.Response} res
+   * @param {Request<{ id: string }>} req
+   * @param {Response} res
    */
   static async getUser(req, res) {
     const user = await UserService.getUser(req.params.id);
@@ -15,18 +16,28 @@ export class UserController {
   }
 
   /**
-   * @param {express.Request} req
-   * @param {express.Response} res
+   * @param {Request<{ id: string }>} _req
+   * @param {Response<unknown, { user: User }>} res
    */
-  static async getUsers(req, res) {
+  static async getCurrentUser(_req, res) {
+    const user = res.locals.user;
+
+    res.status(200).json({ data: user });
+  }
+
+  /**
+   * @param {Request} _req
+   * @param {Response} res
+   */
+  static async getUsers(_req, res) {
     const users = await UserService.getUsers();
 
     res.status(200).json({ data: users });
   }
 
   /**
-   * @param {express.Request<unknown, unknown, ValidUserPayload>} req
-   * @param {express.Response} res
+   * @param {Request<unknown, unknown, ValidUserPayload>} req
+   * @param {Response} res
    */
   static async createUser(req, res) {
     const user = await UserService.createUser(req.body);
