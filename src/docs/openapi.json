@@ -181,7 +181,7 @@
                         },
                         "token": {
                           "type": "string",
-                          "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlYzU5YTQyLTY0ZjQtNDM3ZC04NDc3LTNiM2RiODRjNjBhYSIsImlhdCI6MTczMDEyNzM4NCwiZXhwIjoxNzMwMjEzNzg0fQ.s_I5IA07Jcgi_10JRceoMOzplRxukneJPOZt2Bg0r1A"
+                          "example": "{{vault:json-web-token}}"
                         },
                         "updatedAt": {
                           "type": "string",
@@ -211,7 +211,7 @@
                             "userId": "5ec59a42-64f4-437d-8477-3b3db84c60aa"
                           }
                         ],
-                        "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlYzU5YTQyLTY0ZjQtNDM3ZC04NDc3LTNiM2RiODRjNjBhYSIsImlhdCI6MTczMDEyNzM4NCwiZXhwIjoxNzMwMjEzNzg0fQ.s_I5IA07Jcgi_10JRceoMOzplRxukneJPOZt2Bg0r1A",
+                        "token": "{{vault:json-web-token}}",
                         "updatedAt": "2024-10-25T12:51:28.774Z"
                       }
                     }
@@ -3494,11 +3494,11 @@
                   },
                   "destinationAccountId": {
                     "type": "string",
-                    "example": "4491be04-b89d-497e-882c-d8aed671095a"
+                    "example": "168f6063-5643-41eb-827f-90c04afa3d08"
                   },
                   "sourceAccountId": {
                     "type": "string",
-                    "example": "0d2a7ecf-9291-4161-aaef-71c7c8ff0355"
+                    "example": "6db74fb7-6243-4f7e-a645-4d2336ecbb17"
                   }
                 }
               },
@@ -3506,8 +3506,8 @@
                 "Create transaction": {
                   "value": {
                     "amount": 100,
-                    "destinationAccountId": "4491be04-b89d-497e-882c-d8aed671095a",
-                    "sourceAccountId": "0d2a7ecf-9291-4161-aaef-71c7c8ff0355"
+                    "destinationAccountId": "168f6063-5643-41eb-827f-90c04afa3d08",
+                    "sourceAccountId": "6db74fb7-6243-4f7e-a645-4d2336ecbb17"
                   }
                 }
               }
