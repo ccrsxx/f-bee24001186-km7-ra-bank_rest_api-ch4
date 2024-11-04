@@ -15,6 +15,7 @@
     "test:watch": "node --no-warnings --experimental-vm-modules node_modules/jest/bin/jest.js --watchAll",
     "prepare": "husky",
     "generate-openapi": "dotenv -e .env.local -- node ./src/scripts/openapi.js",
+    "generate-openapi:commit": "npm run generate-openapi && git add .",
     "db:drop": "dotenv -e .env.local -- cross-env-shell \"echo DROP DATABASE IF EXISTS $DATABASE_TO_DROP\" | dotenv -e .env.local -- prisma db execute --stdin",
     "db:seed": "dotenv -e .env.local -- prisma db seed",
     "db:push": "dotenv -e .env.local -- prisma db push",
