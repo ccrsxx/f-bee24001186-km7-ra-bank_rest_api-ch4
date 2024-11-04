@@ -13,6 +13,7 @@
     "format:check": "prettier --check .",
     "test": "node --no-warnings --experimental-vm-modules node_modules/jest/bin/jest.js",
     "test:watch": "node --no-warnings --experimental-vm-modules node_modules/jest/bin/jest.js --watchAll",
+    "test:coverage": "node --no-warnings --experimental-vm-modules node_modules/jest/bin/jest.js --coverage",
     "prepare": "husky",
     "generate-openapi": "dotenv -e .env.local -- node ./src/scripts/openapi.js",
     "generate-openapi:commit": "npm run generate-openapi && git add ./src/docs/openapi.json",
