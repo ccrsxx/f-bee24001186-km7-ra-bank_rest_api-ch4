@@ -1,4 +1,4 @@
-# Simple Bank Rest API
+# Simple Bank Rest API &middot; [![codecov](https://codecov.io/github/ccrsxx/f-bee24001186-km7-ra-bank_rest_api-ch4/graph/badge.svg?token=TG1Z09FP8O)](https://codecov.io/github/ccrsxx/f-bee24001186-km7-ra-bank_rest_api-ch4)
 
 ## Rest API Documentation
 
