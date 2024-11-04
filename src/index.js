@@ -21,9 +21,11 @@ function main() {
   });
 }
 
-try {
-  main();
-} catch (error) {
-  logger.error(error);
-  process.exit(1);
-}
+/** Listen for termination signal */
+process.on('SIGTERM', () => {
+  // Clean up resources on shutdown
+  logger.info('Caught SIGTERM.');
+  logger.flush();
+});
+
+main();
