@@ -48,6 +48,9 @@ describe('Environment configuration', () => {
     process.env.JWT_SECRET = 'secret';
     process.env.DATABASE_URL = 'postgresql://user:ss@localhost:5432';
     process.env.FRONTEND_URL = 'http://localhost:3000';
+    process.env.IMAGEKIT_PUBLIC_KEY = 'public';
+    process.env.IMAGEKIT_PRIVATE_KEY = 'private';
+    process.env.IMAGEKIT_URL_ENDPOINT = 'https://ik.imagekit.io';
   }
 
   async function setupEnvironment() {

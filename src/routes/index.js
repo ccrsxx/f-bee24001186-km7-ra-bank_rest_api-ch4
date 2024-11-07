@@ -3,6 +3,7 @@ import root from './root.js';
 import auth from './auth.js';
 import docs from './docs.js';
 import users from './users.js';
+import upload from './upload.js';
 import accounts from './accounts.js';
 import transactions from './transactions.js';
 
@@ -18,6 +19,7 @@ export default (app) => {
   auth(appRouter);
   docs(appRouter);
   users(appRouter);
+  upload(appRouter);
   accounts(appRouter);
   transactions(appRouter);
 };

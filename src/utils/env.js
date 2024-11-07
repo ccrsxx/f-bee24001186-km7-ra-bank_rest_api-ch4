@@ -10,6 +10,9 @@ import { validStringSchema } from './validation.js';
  * @property {string} JWT_SECRET - The secret for the JWT token.
  * @property {string} DATABASE_URL - The URL for the database connection.
  * @property {string} FRONTEND_URL - The URL for the frontend application.
+ * @property {string} IMAGEKIT_PUBLIC_KEY - The public key for the ImageKit.
+ * @property {string} IMAGEKIT_PRIVATE_KEY - The private key for the ImageKit.
+ * @property {string} IMAGEKIT_URL_ENDPOINT - The URL endpoint for the ImageKit.
  */
 
 /** @type {Joi.ObjectSchema<EnvSchema>} */
@@ -17,7 +20,10 @@ export const envSchema = Joi.object({
   PORT: validStringSchema.required(),
   JWT_SECRET: validStringSchema.required(),
   DATABASE_URL: validStringSchema.required(),
-  FRONTEND_URL: validStringSchema.required()
+  FRONTEND_URL: validStringSchema.required(),
+  IMAGEKIT_PUBLIC_KEY: validStringSchema.required(),
+  IMAGEKIT_PRIVATE_KEY: validStringSchema.required(),
+  IMAGEKIT_URL_ENDPOINT: validStringSchema.required()
 })
   .options({ stripUnknown: true })
   .required();
