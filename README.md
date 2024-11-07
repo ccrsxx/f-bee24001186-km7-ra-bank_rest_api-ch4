@@ -4,12 +4,6 @@
 
 The API documentation can be found [here](https://www.postman.com/soratan/workspace/challenge-4) on Postman.
 
-## Test Coverage
-
-Here's the test coverage result:
-
-![Test Coverage](/.github/assets/coverage.png)
-
 ## Development
 
 Here are the steps to run the project locally.
