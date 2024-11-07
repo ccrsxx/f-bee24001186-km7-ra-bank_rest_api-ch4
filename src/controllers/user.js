@@ -2,7 +2,7 @@ import { UserService } from '../services/user.js';
 
 /** @import {Request,Response} from 'express' */
 /** @import {User} from '@prisma/client' */
-/** @import {ValidUserPayload} from '../middlewares/validation/user.js' */
+/** @import {ValidUserProfilePayload, ValidUserPayload} from '../middlewares/validation/user.js' */
 
 export class UserController {
   /**
@@ -21,6 +21,19 @@ export class UserController {
    */
   static async getCurrentUser(_req, res) {
     const user = res.locals.user;
+
+    res.status(200).json({ data: user });
+  }
+
+  /**
+   * @param {Request<{ id: string }, ValidUserProfilePayload>} req
+   * @param {Response<unknown, { user: User }>} res
+   */
+  static async updateCurrentUserProfile(req, res) {
+    const user = await UserService.updateUserProfile(
+      res.locals.user.id,
+      req.body
+    );
 
     res.status(200).json({ data: user });
   }

@@ -2,7 +2,7 @@ import { prisma } from '../utils/db.js';
 import { HttpError } from '../utils/error.js';
 import { AuthService } from './auth.js';
 
-/** @import {ValidUserPayload} from '../middlewares/validation/user.js' */
+/** @import {ValidUserPayload,ValidUserProfilePayload} from '../middlewares/validation/user.js' */
 
 export class UserService {
   /** @param {string} id */
@@ -59,6 +59,50 @@ export class UserService {
             address,
             identityType,
             identityNumber
+          }
+        }
+      },
+      include: {
+        profile: true
+      }
+    });
+
+    return data;
+  }
+
+  /**
+   * @param {string} id
+   * @param {ValidUserProfilePayload} payload
+   */
+  static async updateUserProfile(id, payload) {
+    const existingUser = await prisma.user.findUnique({
+      where: {
+        id
+      }
+    });
+
+    if (!existingUser) {
+      throw new HttpError(404, 'User not found');
+    }
+
+    const { image, address, identityNumber, identityType } = payload;
+
+    const data = await prisma.user.update({
+      where: {
+        id
+      },
+      data: {
+        profile: {
+          update: {
+            where: {
+              userId: id
+            },
+            data: {
+              image,
+              address,
+              identityType,
+              identityNumber
+            }
           }
         }
       },

@@ -23,10 +23,11 @@ model User {
 }
 
 model Profile {
-  id             String @id @default(uuid()) @db.Uuid
+  id             String  @id @default(uuid()) @db.Uuid
+  image          String?
   address        String
-  identityType   String @map("identity_type")
-  identityNumber String @map("identity_number")
+  identityType   String  @map("identity_type")
+  identityNumber String  @map("identity_number")
 
   userId String @unique @map("user_id") @db.Uuid
 

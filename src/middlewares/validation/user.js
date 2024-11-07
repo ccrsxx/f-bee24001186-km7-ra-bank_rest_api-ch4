@@ -6,6 +6,7 @@ import { HttpError } from '../../utils/error.js';
 /** @import {Prisma} from '@prisma/client' */
 
 /** @typedef {Prisma.UserCreateInput & Prisma.ProfileCreateWithoutUserInput} ValidUserPayload */
+/** @typedef {Prisma.ProfileCreateWithoutUserInput} ValidUserProfilePayload */
 
 export class UserValidationMiddleware {
   /**
@@ -25,6 +26,37 @@ export class UserValidationMiddleware {
     }).required();
 
     const { error } = validUserPayload.validate(req.body);
+
+    if (error) {
+      throw new HttpError(400, error.message);
+    }
+
+    next();
+  }
+
+  /**
+   * @param {Request<unknown, ValidUserProfilePayload>} req
+   * @param {Response} _res
+   * @param {NextFunction} next
+   */
+  static isValidUserProfilePayload(req, _res, next) {
+    /** @type {Joi.ObjectSchema<ValidUserProfilePayload>} */
+    const validProfilePayload = Joi.object({
+      image: Joi.string().uri(),
+      address: validStringSchema,
+      identityType: validStringSchema,
+      identityNumber: validStringSchema
+    }).required();
+
+    const body = req.body;
+
+    const validPayload = body && Object.keys(body).length;
+
+    if (!validPayload) {
+      throw new HttpError(400, 'Profile payload is required');
+    }
+
+    const { error } = validProfilePayload.validate(req.body);
 
     if (error) {
       throw new HttpError(400, error.message);
