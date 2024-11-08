@@ -6,6 +6,9 @@ on:
       - main
 
 jobs:
+  ci:
+    uses: ./.github/workflows/ci.yaml
+
   deploy:
     name: Build and deploy to Cloud Run
     runs-on: ubuntu-latest
