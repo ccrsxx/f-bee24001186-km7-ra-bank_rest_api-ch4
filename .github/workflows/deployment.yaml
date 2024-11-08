@@ -13,6 +13,10 @@ jobs:
       contents: 'read'
       id-token: 'write'
 
+    env:
+      DOCKER_IMAGE_TAG: '${{ VARS.REGION }}-docker.pkg.dev/${{ VARS.PROJECT_ID }}/${{ VARS.ARTIFACT_REPO }}/${{ VARS.SERVICE }}:${{ github.sha }}'
+      GCP_ARTIFACT_REGISTRY: '${{ VARS.REGION }}-docker.pkg.dev'
+
     steps:
       - name: 'Checkout'
         uses: 'actions/checkout@v4'
@@ -25,27 +29,33 @@ jobs:
           workload_identity_provider: '${{ secrets.WIF_PROVIDER }}'
 
       - name: Configure Google Cloud to use specific region for the artifact registry
-        run: gcloud auth configure-docker ${{ vars.REGION }}-docker.pkg.dev --quiet
+        run: gcloud auth configure-docker ${{ env.GCP_ARTIFACT_REGISTRY}} -q
 
       - name: 'Docker Auth'
         uses: 'docker/login-action@v3'
         with:
           username: 'oauth2accesstoken'
           password: '${{ steps.auth.outputs.auth_token }}'
-          registry: '${{ vars.REGION }}-docker.pkg.dev'
+          registry: '${{ env.GCP_ARTIFACT_REGISTRY }}'
 
-      - name: Build and push
-        uses: docker/build-push-action@v6
-        with:
-          push: true
-          tags: '${{ vars.REGION }}-docker.pkg.dev/${{ vars.PROJECT_ID }}/${{ vars.ARTIFACT_REPO }}/${{ vars.SERVICE }}:${{ github.sha }}'
+      - name: 'Build and Push Container'
+        run: |
+          docker build -t ${{ env.DOCKER_IMAGE_TAG }} .
+          docker push ${{ env.DOCKER_IMAGE_TAG }}
 
       - name: 'Deploy to Cloud Run'
         uses: 'google-github-actions/deploy-cloudrun@v2'
         with:
-          service: '${{ vars.SERVICE }}'
+          image: '${{ env.DOCKER_IMAGE_TAG }}'
           region: '${{ vars.REGION }}'
-          image: '${{ vars.REGION }}-docker.pkg.dev/${{ vars.PROJECT_ID }}/${{ vars.ARTIFACT_REPO }}/${{ vars.SERVICE }}:${{ github.sha }}'
+          service: '${{ vars.SERVICE }}'
+          env_vars: |
+            JWT_SECRET=${{ secrets.JWT_SECRET }}
+            DATABASE_URL=${{ secrets.DATABASE_URL }}
+            FRONTEND_URL=${{ secrets.FRONTEND_URL }}
+            IMAGEKIT_PUBLIC_KEY=${{ secrets.IMAGEKIT_PUBLIC_KEY }} 
+            IMAGEKIT_PRIVATE_KEY=${{ secrets.IMAGEKIT_PRIVATE_KEY }} 
+            IMAGEKIT_URL_ENDPOINT=${{ secrets.IMAGEKIT_URL_ENDPOINT }}
 
       - name: 'Show output'
         run: echo ${{ steps.deploy.outputs.url }}
