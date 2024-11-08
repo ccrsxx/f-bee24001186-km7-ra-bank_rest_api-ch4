@@ -13,7 +13,7 @@ WORKDIR /app
 COPY package*.json ./
 
 # Install dependencies.
-RUN npm ci --only=production
+RUN npm ci --production
 
 # Copy local code to the container image.
 COPY . ./
