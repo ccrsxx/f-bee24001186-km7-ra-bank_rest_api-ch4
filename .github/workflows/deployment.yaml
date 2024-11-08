@@ -24,6 +24,9 @@ jobs:
           service_account: '${{ secrets.WIF_SERVICE_ACCOUNT }}'
           workload_identity_provider: '${{ secrets.WIF_PROVIDER }}'
 
+      - name: Configure Google Cloud to use specific region for the artifact registry
+        run: gcloud auth configure-docker ${{ vars.REGION }}-docker.pkg.dev
+
       - name: 'Docker Auth'
         uses: 'docker/login-action@v3'
         with:
@@ -45,5 +48,4 @@ jobs:
           image: '${{ vars.REGION }}-docker.pkg.dev/${{ vars.PROJECT_ID }}/${{ vars.SERVICE }}:${{ github.sha }}'
 
       - name: 'Show output'
-        run: |
-          echo ${{ steps.deploy.outputs.url }}
+        run: echo ${{ steps.deploy.outputs.url }}
