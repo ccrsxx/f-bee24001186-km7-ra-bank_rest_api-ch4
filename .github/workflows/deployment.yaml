@@ -45,7 +45,7 @@ jobs:
         with:
           service: '${{ vars.SERVICE }}'
           region: '${{ vars.REGION }}'
-          image: '${{ vars.REGION }}-docker.pkg.dev/${{ vars.PROJECT_ID }}/${{ vars.SERVICE }}:${{ github.sha }}'
+          image: '${{ vars.REGION }}-docker.pkg.dev/${{ vars.PROJECT_ID }}/${{ vars.SERVICE }}/${{ vars.SERVICE }}:${{ github.sha }}'
 
       - name: 'Show output'
         run: echo ${{ steps.deploy.outputs.url }}
