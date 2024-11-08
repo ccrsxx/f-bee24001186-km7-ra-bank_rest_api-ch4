@@ -7,6 +7,8 @@ import { appEnv } from './utils/env.js';
 import { logger } from './loaders/pino.js';
 
 function main() {
+  logger.info('Test CI on PR');
+
   const app = express();
   const server = createServer(app);
 
