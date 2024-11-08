@@ -5,12 +5,17 @@ services:
       service: app
     build:
       dockerfile: Dockerfile
-    environment:
-      - NODE_ENV=production
     container_name: bank-rest-api
+    environment:
+      - DEPLOY_DATABASE=${DEPLOY_DATABASE:-false}
 
   db:
     extends:
       file: compose.common.yaml
       service: db
     container_name: bank-rest-api-db
+    volumes:
+      - db-data:/var/lib/postgresql/data
+
+volumes:
+  db-data:
