@@ -1,8 +1,8 @@
+# Select the base image
 FROM node:20-alpine
 
 # Add environment variables
 ENV HUSKY=0
-ENV NODE_ENV=production
 
 # Create and change to the app directory.
 WORKDIR /app
