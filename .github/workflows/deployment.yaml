@@ -1,4 +1,4 @@
-name: 'Build and Deploy to Cloud Run'
+name: Build and Deploy to Cloud Run
 
 on:
   push:
@@ -7,44 +7,44 @@ on:
 
 jobs:
   deploy:
-    runs-on: 'ubuntu-latest'
+    runs-on: ubuntu-latest
 
     permissions:
-      contents: 'read'
-      id-token: 'write'
+      id-token: write
+      contents: read
 
     env:
       DOCKER_IMAGE_TAG: '${{ VARS.REGION }}-docker.pkg.dev/${{ VARS.PROJECT_ID }}/${{ VARS.ARTIFACT_REPO }}/${{ VARS.SERVICE }}:${{ github.sha }}'
-      GCP_ARTIFACT_REGISTRY: '${{ VARS.REGION }}-docker.pkg.dev'
+      ARTIFACT_REGISTRY: '${{ VARS.REGION }}-docker.pkg.dev'
 
     steps:
-      - name: 'Checkout'
-        uses: 'actions/checkout@v4'
+      - name: Checkout repo
+        uses: actions/checkout@v4
 
-      - id: 'auth'
-        name: 'Authenticate to Google Cloud'
-        uses: 'google-github-actions/auth@v2'
+      - id: auth
+        name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v2
         with:
           service_account: '${{ secrets.WIF_SERVICE_ACCOUNT }}'
           workload_identity_provider: '${{ secrets.WIF_PROVIDER }}'
 
       - name: Configure Google Cloud to use specific region for the artifact registry
-        run: gcloud auth configure-docker ${{ env.GCP_ARTIFACT_REGISTRY}} -q
+        run: gcloud auth configure-docker ${{ env.ARTIFACT_REGISTRY}} -q
 
-      - name: 'Docker Auth'
-        uses: 'docker/login-action@v3'
+      - name: Authenticate to Docker registry
+        uses: docker/login-action@v3
         with:
           username: 'oauth2accesstoken'
           password: '${{ steps.auth.outputs.auth_token }}'
-          registry: '${{ env.GCP_ARTIFACT_REGISTRY }}'
+          registry: '${{ env.ARTIFACT_REGISTRY }}'
 
-      - name: 'Build and Push Container'
+      - name: Build and push Docker image
         run: |
           docker build -t ${{ env.DOCKER_IMAGE_TAG }} .
           docker push ${{ env.DOCKER_IMAGE_TAG }}
 
-      - name: 'Deploy to Cloud Run'
-        uses: 'google-github-actions/deploy-cloudrun@v2'
+      - name: Deploy to Cloud Run
+        uses: google-github-actions/deploy-cloudrun@v2
         with:
           image: '${{ env.DOCKER_IMAGE_TAG }}'
           region: '${{ vars.REGION }}'
@@ -56,6 +56,4 @@ jobs:
             IMAGEKIT_PUBLIC_KEY=${{ secrets.IMAGEKIT_PUBLIC_KEY }} 
             IMAGEKIT_PRIVATE_KEY=${{ secrets.IMAGEKIT_PRIVATE_KEY }} 
             IMAGEKIT_URL_ENDPOINT=${{ secrets.IMAGEKIT_URL_ENDPOINT }}
-
-      - name: 'Show output'
-        run: echo ${{ steps.deploy.outputs.url }}
+          env_vars_update_strategy: 'overwrite'
