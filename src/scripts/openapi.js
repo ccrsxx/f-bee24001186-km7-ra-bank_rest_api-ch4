@@ -50,6 +50,10 @@ async function main() {
     {
       url: 'http://localhost:4000',
       description: 'Local development server'
+    },
+    {
+      url: 'https://binar.ccrsxx.com',
+      description: 'Production server'
     }
   ];
 
