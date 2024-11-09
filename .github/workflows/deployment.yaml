@@ -35,7 +35,7 @@ jobs:
           workload_identity_provider: '${{ secrets.WIF_PROVIDER }}'
 
       - name: Configure Google Cloud to use specific region for the artifact registry
-        run: gcloud auth configure-docker ${{ env.ARTIFACT_REGISTRY}} -q
+        run: gcloud auth configure-docker ${{ env.ARTIFACT_REGISTRY }} -q
 
       - name: Authenticate to Docker registry
         uses: docker/login-action@v3
