@@ -8,7 +8,7 @@ datasource db {
 }
 
 model User {
-  id       String @id @default(uuid()) @db.Uuid
+  id       String @id @default(uuid(7)) @db.Uuid
   name     String
   email    String @unique
   password String
@@ -23,7 +23,7 @@ model User {
 }
 
 model Profile {
-  id             String  @id @default(uuid()) @db.Uuid
+  id             String  @id @default(uuid(7)) @db.Uuid
   image          String?
   address        String
   identityType   String  @map("identity_type")
@@ -40,7 +40,7 @@ model Profile {
 }
 
 model Account {
-  id                String  @id @default(uuid()) @db.Uuid
+  id                String  @id @default(uuid(7)) @db.Uuid
   balance           Decimal @default(0) @db.Decimal(18, 2)
   bankName          String  @map("bank_name")
   bankAccountNumber BigInt  @unique @default(autoincrement()) @map("bank_account_number")
@@ -59,7 +59,7 @@ model Account {
 }
 
 model Transaction {
-  id                   String  @id @default(uuid()) @db.Uuid
+  id                   String  @id @default(uuid(7)) @db.Uuid
   amount               Decimal
   sourceAccountId      String  @map("source_account_id") @db.Uuid
   destinationAccountId String  @map("destination_account_id") @db.Uuid
