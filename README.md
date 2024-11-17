@@ -53,7 +53,7 @@ Here are the steps to run the project locally.
 1. Optional. Run generate OpenAPI documentation. Make sure to fill necessary environment variables in `.env.local` file before running this command.
 
    ```bash
-   npm run generate-openapi
+   npm run openapi:generate
    ```
 
 1. Optional. You can run Prisma Studio to see the data in the database directly on the browser
