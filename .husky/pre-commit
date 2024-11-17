@@ -4,6 +4,6 @@ npm run type-check
 npm run test
 npm run lint
 
-npm run generate-openapi:commit
+npm run openapi:generate:commit
 
 npx lint-staged
