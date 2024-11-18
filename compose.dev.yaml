@@ -6,7 +6,7 @@ services:
     build:
       dockerfile: Dockerfile.dev
     volumes:
-      - .:/app
+      - ./src:/app/src
     container_name: bank-rest-api-dev
 
   db:
