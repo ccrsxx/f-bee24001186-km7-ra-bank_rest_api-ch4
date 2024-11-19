@@ -7,5 +7,5 @@
     "outDir": "build",
     "resolveJsonModule": true
   },
-  "include": ["src/**/*.js"]
+  "exclude": ["coverage", "build", "**/*.test.js"]
 }
