@@ -72,7 +72,7 @@ describe('Error middleware', () => {
     );
   });
 
-  it('should call next with an Internal Server Error', () => {
+  it('should call next with an Internal server error', () => {
     const { req, res, next } = setupExpressMock();
 
     const err = null;
@@ -83,7 +83,7 @@ describe('Error middleware', () => {
     expect(res.status).toHaveBeenCalledWith(500);
     expect(res.json).toHaveBeenCalledTimes(1);
     expect(res.json).toHaveBeenCalledWith({
-      error: { message: 'Internal Server Error' }
+      error: { message: 'Internal server error' }
     });
   });
 });

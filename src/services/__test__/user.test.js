@@ -5,8 +5,14 @@ import { generatePrismaMock } from '../../utils/jest.js';
 
 /** @import {GeneratedPrismaMock} from '../../utils/jest.js' */
 /** @import {ValidUserPayload} from '../../middlewares/validation/user.js' */
+/** @typedef {Record<keyof import('../../loaders/socket.js'), jest.Mock>} SocketMock */
 
 jest.unstable_mockModule('../../utils/db.js', generatePrismaMock);
+jest.unstable_mockModule('../../loaders/socket.js', () => ({
+  io: {
+    emit: jest.fn()
+  }
+}));
 
 const { UserService } = await import('../user.js');
 
