@@ -1,3 +1,4 @@
+import { io } from '../loaders/socket.js';
 import { prisma } from '../utils/db.js';
 import { HttpError } from '../utils/error.js';
 import { AuthService } from './auth.js';
@@ -66,6 +67,11 @@ export class UserService {
         profile: true
       }
     });
+
+    io.emit(
+      'notifications:new-user',
+      `A new user has been registered with ${data.email}`
+    );
 
     return data;
   }

@@ -1,10 +1,13 @@
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
+import { io } from '../loaders/socket.js';
 import { appEnv } from '../utils/env.js';
 import { HttpError } from '../utils/error.js';
 import { prisma } from '../utils/db.js';
+import { generateRandomToken } from '../utils/helper.js';
+import { sendResetPasswordEmail } from '../utils/emails/mail.js';
 
-/** @import {ValidLoginPayload} from '../middlewares/validation/auth.js' */
+/** @import {ValidLoginPayload, ValidResetPasswordPayload} from '../middlewares/validation/auth.js' */
 
 export class AuthService {
   /** @param {ValidLoginPayload} payload */
@@ -101,6 +104,115 @@ export class AuthService {
       }
 
       throw err;
+    }
+  }
+
+  /** @param {string} email */
+  static async sendPasswordResetEmail(email) {
+    const user = await prisma.user.findUnique({
+      where: {
+        email
+      }
+    });
+
+    if (!user) return null;
+
+    await prisma.$transaction(async (tx) => {
+      await tx.passwordReset.updateMany({
+        where: {
+          userId: user.id,
+          used: false,
+          expiredAt: {
+            gte: new Date()
+          }
+        },
+        data: {
+          used: true
+        }
+      });
+
+      const nextHourDate = new Date();
+
+      nextHourDate.setHours(nextHourDate.getHours() + 1);
+
+      const newVerifyResetPassword = await tx.passwordReset.create({
+        data: {
+          used: false,
+          token: generateRandomToken(),
+          userId: user.id,
+          expiredAt: nextHourDate
+        }
+      });
+
+      await sendResetPasswordEmail({
+        name: user.name,
+        email: user.email,
+        token: newVerifyResetPassword.token
+      });
+    });
+  }
+
+  /** @param {ValidResetPasswordPayload} payload */
+  static async resetPassword({ token, password }) {
+    const resetPasswordData = await prisma.passwordReset.findFirst({
+      where: {
+        token,
+        used: false,
+        expiredAt: {
+          gte: new Date()
+        }
+      },
+      include: {
+        user: true
+      }
+    });
+
+    if (!resetPasswordData) {
+      throw new HttpError(400, 'Invalid or expired token');
+    }
+
+    const hashedPassword = await this.hashPassword(password);
+
+    await prisma.$transaction(async (tx) => {
+      await tx.passwordReset.update({
+        where: {
+          id: resetPasswordData.id
+        },
+        data: {
+          used: true
+        }
+      });
+
+      await tx.user.update({
+        where: {
+          id: resetPasswordData.userId
+        },
+        data: {
+          password: hashedPassword
+        }
+      });
+
+      io.emit(
+        'notifications:password-reset',
+        `A user has reset their password with email ${resetPasswordData.user.email}`
+      );
+    });
+  }
+
+  /** @param {string} token */
+  static async verifyPasswordResetToken(token) {
+    const resetPasswordData = await prisma.passwordReset.findFirst({
+      where: {
+        token,
+        used: false,
+        expiredAt: {
+          gte: new Date()
+        }
+      }
+    });
+
+    if (!resetPasswordData) {
+      throw new HttpError(400, 'Invalid or expired token');
     }
   }
 }

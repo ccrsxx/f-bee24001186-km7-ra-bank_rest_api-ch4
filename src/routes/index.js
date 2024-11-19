@@ -6,6 +6,7 @@ import users from './users.js';
 import upload from './upload.js';
 import accounts from './accounts.js';
 import transactions from './transactions.js';
+import notifications from './notifications.js';
 
 /** @import {Application} from 'express' */
 
@@ -22,4 +23,5 @@ export default (app) => {
   upload(appRouter);
   accounts(appRouter);
   transactions(appRouter);
+  notifications(appRouter);
 };

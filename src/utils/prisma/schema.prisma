@@ -13,8 +13,9 @@ model User {
   email    String @unique
   password String
 
-  profile Profile[]
-  account Account[]
+  profile       Profile[]
+  account       Account[]
+  passwordReset PasswordReset[]
 
   createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz()
   updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz()
@@ -37,6 +38,22 @@ model Profile {
   updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz()
 
   @@map("profiles")
+}
+
+model PasswordReset {
+  id        String   @id @default(uuid(7)) @db.Uuid
+  used      Boolean  @default(false)
+  token     String
+  expiredAt DateTime @map("expired_at") @db.Timestamptz()
+
+  userId String @map("user_id") @db.Uuid
+
+  user User @relation(fields: [userId], references: [id])
+
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz()
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz()
+
+  @@map("password_reset")
 }
 
 model Account {

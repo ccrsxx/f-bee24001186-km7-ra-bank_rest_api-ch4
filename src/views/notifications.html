@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Notifications</title>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body class="grid min-h-screen place-items-center bg-violet-50">
+    <main
+      class="max-w-lg grid content-start h-[420px] [&>section]:p-4 w-full text-violet-400 rounded-lg border shadow hover:shadow-lg bg-white"
+    >
+      <section>
+        <h1 class="text-xl font-semibold">Notifications</h1>
+      </section>
+      <hr />
+      <section class="overflow-auto h-full">
+        <ul id="notifications" class="grid gap-2" />
+      </section>
+    </main>
+    <script>
+      const socket = io();
+      const notifications = document.getElementById('notifications');
+
+      socket.on('connect', () => {
+        console.log('Connected to server');
+
+        socket.on('notifications:new-user', (message) => {
+          const li = document.createElement('li');
+
+          li.textContent = message;
+
+          notifications.appendChild(li);
+        });
+
+        socket.on('notifications:password-reset', (message) => {
+          const li = document.createElement('li');
+
+          li.textContent = message;
+
+          notifications.appendChild(li);
+        });
+      });
+
+      socket.on('disconnect', () => {
+        console.log('Disconnected from server');
+      });
+    </script>
+  </body>
+</html>

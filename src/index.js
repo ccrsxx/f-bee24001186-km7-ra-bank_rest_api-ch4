@@ -1,3 +1,4 @@
+import sentry from './loaders/sentry.js';
 import express from 'express';
 import { createServer } from 'http';
 import loaders from './loaders/index.js';
@@ -13,6 +14,8 @@ function main() {
   loaders(app, server);
 
   routes(app);
+
+  sentry(app);
 
   errorHandler(app);
 
