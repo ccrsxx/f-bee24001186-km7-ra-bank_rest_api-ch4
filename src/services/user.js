@@ -70,7 +70,7 @@ export class UserService {
 
     io.emit(
       'notifications:new-user',
-      `A new user has been registered with ${data.email}`
+      `A new user has been registered with email ${data.email}`
     );
 
     return data;
