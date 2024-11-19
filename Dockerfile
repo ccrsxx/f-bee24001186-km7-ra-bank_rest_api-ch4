@@ -29,24 +29,11 @@ ENV HUSKY=0
 # Create and change to the app directory
 WORKDIR /app
 
-# Copy application dependency manifests to the container image
-COPY package*.json .
-
-# Copy the prisma schema and migrations
-# Copying this is necessary to generate the prisma client
-# Prisma will try to generate the client after installing @prisma/client
-# If the schema is not present, the client will not be generated
-# Migration is also necessary in case we need to run migration on the entrypoint
-COPY --from=build /app/src/utils/prisma ./src/utils/prisma
+# Copy the build output to the image
+COPY --from=build /app/build .
 
 # Install dependencies
-RUN npm ci --production
-
-# Copy the entrypoint script
-COPY entrypoint.sh .
-
-# Copy the build output to the image
-COPY --from=build /app/build ./build
+RUN npm ci --omit=dev
 
 # Run the web service on container startup
 ENTRYPOINT ["./entrypoint.sh"]
