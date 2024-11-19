@@ -29,11 +29,20 @@ ENV HUSKY=0
 # Create and change to the app directory
 WORKDIR /app
 
-# Copy the build output to the image
-COPY --from=build /app/build .
+# Copy application dependency manifests to the container image
+COPY package*.json .
+
+# Copy the prisma schema and migrations
+COPY src/utils/prisma src/utils/prisma
 
 # Install dependencies
 RUN npm ci --omit=dev
+
+# Copy the entrypoint script
+COPY entrypoint.sh .
+
+# Copy the build output to the image
+COPY --from=build /app/build .
 
 # Run the web service on container startup
 ENTRYPOINT ["./entrypoint.sh"]
