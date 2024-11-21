@@ -23,11 +23,6 @@ const client = createTransport({
  * @returns {Promise<void>}
  */
 export async function sendResetPasswordEmail({ name, email, token }) {
-  const forgotPasswordRaw = await readFile(
-    './src/utils/emails/build/password-reset.html',
-    'utf8'
-  );
-
   /**
    * @typedef {Object} ResetPasswordContext
    * @property {string} name
@@ -35,17 +30,34 @@ export async function sendResetPasswordEmail({ name, email, token }) {
    */
 
   /** @type {HandlebarsTemplateDelegate<ResetPasswordContext>} */
-  const forgotPasswordTemplate = handlebars.compile(forgotPasswordRaw);
+  const emailTemplate = await createEmailTemplate('password-reset');
 
-  const htmlToSend = forgotPasswordTemplate({
-    name: name,
-    url: `https://${appEnv.FRONTEND_URL}/password-reset/${token}`
+  const parsedEmailTemplate = emailTemplate({
+    name,
+    url: `${appEnv.FRONTEND_URL}/reset-password?token=${token}`
   });
 
   await client.sendMail({
     from: appEnv.EMAIL_ADDRESS,
     to: email,
     subject: 'Reset password',
-    html: htmlToSend
+    html: parsedEmailTemplate
   });
+}
+
+/** @typedef {'password-reset'} EmailTemplate */
+
+/**
+ * @param {EmailTemplate} template
+ * @returns {Promise<HandlebarsTemplateDelegate>}
+ */
+async function createEmailTemplate(template) {
+  const rawEmail = await readFile(
+    `./src/utils/emails/build/${template}.html`,
+    'utf8'
+  );
+
+  const parsedEmail = handlebars.compile(rawEmail);
+
+  return parsedEmail;
 }
